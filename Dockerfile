@@ -76,7 +76,7 @@ COPY docker/run.sh /usr/local/bin/run.sh
 RUN chmod +x /usr/local/bin/run.sh
 
 # Expose port
-EXPOSE 80
+EXPOSE 8080
 
 # Run the startup script
 CMD ["/usr/local/bin/run.sh"]
