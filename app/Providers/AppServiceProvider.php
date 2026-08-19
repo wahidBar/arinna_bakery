@@ -5,8 +5,11 @@ namespace App\Providers;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
+use Inertia\Inertia;
+use Laravel\Fortify\Contracts\LoginResponse;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,10 +27,33 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+        $this->configureLoginRedirect();
 
         if ($this->app->environment('production')) {
-            \Illuminate\Support\Facades\URL::forceScheme('https');
+            URL::forceScheme('https');
         }
+    }
+
+    /**
+     * Override Fortify LoginResponse untuk redirect berbasis role.
+     */
+    protected function configureLoginRedirect(): void
+    {
+        $this->app->singleton(LoginResponse::class, fn () => new class implements LoginResponse
+        {
+            public function toResponse($request): mixed
+            {
+                $user = $request->user();
+
+                if ($user && $user->role === 'admin') {
+                    // Force full page load — admin dashboard adalah Blade view (bukan Inertia)
+                    return Inertia::location(route('admin.dashboard'));
+                }
+
+                // Force full page load ke home (juga Blade view)
+                return Inertia::location(url('/'));
+            }
+        });
     }
 
     /**

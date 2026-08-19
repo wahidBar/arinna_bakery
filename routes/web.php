@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
@@ -9,6 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductReviewController;
+use App\Http\Middleware\EnsureUserIsAdmin;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,10 +37,6 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.stor
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', function () {
-        return inertia('Dashboard');
-    })->name('dashboard');
-
     // Cart (semua endpoint AJAX kecuali halaman index)
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
@@ -60,7 +56,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/products/{product}/reviews', [ProductReviewController::class, 'store'])->name('products.reviews.store');
 });
 
-require __DIR__ . '/settings.php';
+require __DIR__.'/settings.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -69,5 +65,5 @@ require __DIR__ . '/settings.php';
 */
 Route::prefix('admin')
     ->name('admin.')
-    ->middleware(['auth', \App\Http\Middleware\EnsureUserIsAdmin::class])
+    ->middleware(['auth', EnsureUserIsAdmin::class])
     ->group(base_path('routes/admin.php'));

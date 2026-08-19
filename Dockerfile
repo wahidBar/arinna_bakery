@@ -67,7 +67,11 @@ COPY docker/supervisord.conf /etc/supervisord.conf
 COPY docker/run.sh /usr/local/bin/run.sh
 RUN chmod +x /usr/local/bin/run.sh
 
-ENV PORT=8080
+ENV APP_ENV=production \
+    APP_DEBUG=false \
+    CACHE_STORE=file \
+    PORT=8080 \
+    SESSION_DRIVER=file
 
 EXPOSE 8080
 
