@@ -1,12 +1,10 @@
 # Stage 1: Build Dependencies (PHP + Node)
-FROM php:8.4-fpm-alpine as builder
+FROM php:8.4-fpm-alpine AS builder
 
 # Install system dependencies needed for build
 RUN apk add --no-cache \
-    curl \
-    zip \
-    unzip \
     git \
+    unzip \
     libpng-dev \
     libxml2-dev \
     oniguruma-dev \
@@ -15,10 +13,10 @@ RUN apk add --no-cache \
     npm
 
 # Install PHP extensions required
-RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd xml
+RUN docker-php-ext-install bcmath exif gd mbstring pcntl pdo pdo_mysql xml
 
 # Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Set working directory
 WORKDIR /app
@@ -31,7 +29,7 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
 
 # Install NPM dependencies and build frontend assets
-RUN npm install
+RUN npm ci
 RUN npm run build
 
 
@@ -41,19 +39,13 @@ FROM php:8.4-fpm-alpine
 # Install system dependencies for production
 RUN apk add --no-cache \
     nginx \
-    curl \
-    zip \
-    unzip \
-    git \
     libpng-dev \
     libxml2-dev \
     oniguruma-dev \
-    linux-headers \
-    supervisor \
-    bash
+    supervisor
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd xml
+RUN docker-php-ext-install bcmath exif gd mbstring pcntl pdo pdo_mysql xml
 
 # Set working directory
 WORKDIR /var/www/html
@@ -75,8 +67,9 @@ COPY docker/supervisord.conf /etc/supervisord.conf
 COPY docker/run.sh /usr/local/bin/run.sh
 RUN chmod +x /usr/local/bin/run.sh
 
-# Expose port
-EXPOSE 80
+ENV PORT=8080
+
+EXPOSE 8080
 
 # Run the startup script
 CMD ["/usr/local/bin/run.sh"]
