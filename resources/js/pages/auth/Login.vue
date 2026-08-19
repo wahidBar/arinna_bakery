@@ -87,44 +87,25 @@ defineProps<{
                 >
                     <!-- Email -->
                     <div class="form-group">
-                        <Label for="email" class="form-label"
-                            >Alamat Email</Label
-                        >
-                        <div class="input-icon-wrapper">
-                            <svg
-                                class="input-icon"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                            >
-                                <path
-                                    d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
-                                />
-                                <polyline points="22,6 12,12 2,6" />
-                            </svg>
-                            <Input
-                                id="email"
-                                type="email"
-                                name="email"
-                                required
-                                autofocus
-                                :tabindex="1"
-                                autocomplete="email"
-                                placeholder="nama@contoh.com"
-                                class="form-input with-icon"
-                            />
-                        </div>
+                        <Label for="email" class="form-label">Alamat Email</Label>
+                        <Input
+                            id="email"
+                            type="email"
+                            name="email"
+                            required
+                            autofocus
+                            :tabindex="1"
+                            autocomplete="email"
+                            placeholder="nama@contoh.com"
+                            class="form-input"
+                        />
                         <InputError :message="errors.email" />
                     </div>
 
                     <!-- Password -->
                     <div class="form-group">
                         <div class="form-label-row">
-                            <Label for="password" class="form-label"
-                                >Password</Label
-                            >
+                            <Label for="password" class="form-label">Password</Label>
                             <Link
                                 v-if="canResetPassword"
                                 :href="request()"
@@ -134,35 +115,15 @@ defineProps<{
                                 Lupa password?
                             </Link>
                         </div>
-                        <div class="input-icon-wrapper">
-                            <svg
-                                class="input-icon"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                            >
-                                <rect
-                                    x="3"
-                                    y="11"
-                                    width="18"
-                                    height="11"
-                                    rx="2"
-                                    ry="2"
-                                />
-                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                            </svg>
-                            <PasswordInput
-                                id="password"
-                                name="password"
-                                required
-                                :tabindex="2"
-                                autocomplete="current-password"
-                                placeholder="••••••••"
-                                class="form-input with-icon"
-                            />
-                        </div>
+                        <PasswordInput
+                            id="password"
+                            name="password"
+                            required
+                            :tabindex="2"
+                            autocomplete="current-password"
+                            placeholder="••••••••"
+                            class="form-input"
+                        />
                         <InputError :message="errors.password" />
                     </div>
 
@@ -415,33 +376,16 @@ defineProps<{
     text-decoration: underline;
 }
 
-/* Input icon */
-.input-icon-wrapper {
-    position: relative;
-}
-
-.input-icon {
-    position: absolute;
-    left: 0.875rem;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 16px;
-    height: 16px;
-    color: #8b95cc;
-    pointer-events: none;
-    z-index: 1;
-}
-
-.with-icon {
-    padding-left: 2.5rem !important;
+/* Input styling */
+.form-input {
     border-color: #c8cef0 !important;
     background: #fff !important;
-    transition:
-        border-color 0.2s,
-        box-shadow 0.2s !important;
+    color: #1e2560 !important;
+    transition: border-color 0.2s, box-shadow 0.2s !important;
 }
 
-.with-icon:focus {
+.form-input:focus,
+.form-input:focus-within {
     border-color: #6c7fd8 !important;
     box-shadow: 0 0 0 3px rgba(108, 127, 216, 0.15) !important;
     outline: none !important;
