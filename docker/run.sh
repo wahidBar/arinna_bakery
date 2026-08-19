@@ -22,6 +22,9 @@ if [ "${RUN_MIGRATIONS:-true}" = "true" ]; then
     php artisan migrate --force
 fi
 
+# Laravel storage symlink
+php artisan storage:link
+
 php artisan optimize:clear
 php artisan config:cache
 php artisan route:cache
