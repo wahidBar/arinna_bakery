@@ -4,10 +4,10 @@
 
 @section('content')
 @include('partials.breadcrumb', [
-    'items' => [
-        ['label' => 'Blog', 'url' => route('blog.index')],
-        ['label' => $blog ? $blog->title : 'Artikel'],
-    ]
+'items' => [
+['label' => 'Blog', 'url' => route('blog.index')],
+['label' => $blog ? $blog->title : 'Artikel'],
+]
 ])
 <section class="section-blog-details py-[50px] max-[1199px]:py-[35px]">
     <div class="flex flex-wrap justify-between relative mx-auto min-[1400px]:max-w-[1320px] min-[1200px]:max-w-[1140px] min-[992px]:max-w-[960px] min-[768px]:max-w-[720px] min-[576px]:max-w-[540px]">
@@ -37,36 +37,6 @@
                         <div class="prose prose-stone max-w-none text-stone-700 leading-relaxed font-Poppins text-[#686e7d] tracking-[0.03rem]">
                             {!! $blog->content !!}
                         </div>
-
-                        @if($blog->instagram_link)
-                        @php
-                        // Extract the canonical part (strip query string)
-                        $igLink = strtok($blog->instagram_link, '?');
-                        $igLink = rtrim($igLink, '/') . '/';
-                        // Build the proper embed URL:
-                        // e.g. https://www.instagram.com/reel/ABC123/embed/
-                        // strip username segment if present: /username/reel/CODE/ → /reel/CODE/
-                        $igEmbedUrl = preg_replace('#instagram\.com/[^/]+/(reel|p|tv)/([^/]+)/#', 'instagram.com/$1/$2/embed/', $igLink);
-                        // if URL already has /embed/ no change needed
-                        if (!str_contains($igEmbedUrl, '/embed/')) {
-                        $igEmbedUrl = $igLink . 'embed/';
-                        }
-                        @endphp
-                        <div class="mt-8 flex justify-center w-full">
-                            <div style="max-width:500px; width:100%; border-radius:15px; overflow:hidden; box-shadow:0 0 1px rgba(0,0,0,.5),0 1px 10px rgba(0,0,0,.15);">
-                                <iframe src="{{ $igEmbedUrl }}"
-                                    width="100%"
-                                    height="640"
-                                    frameborder="0"
-                                    scrolling="no"
-                                    allowtransparency="true"
-                                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                                    loading="lazy"
-                                    style="background:#fff; display:block;">
-                                </iframe>
-                            </div>
-                        </div>
-                        @endif
                     </div>
 
                     {{-- Share button (maintained from original) --}}
@@ -203,6 +173,35 @@
                             </ul>
                         </div>
                     </div>
+                    @if($blog->instagram_link)
+                    @php
+                    // Extract the canonical part (strip query string)
+                    $igLink = strtok($blog->instagram_link, '?');
+                    $igLink = rtrim($igLink, '/') . '/';
+                    // Build the proper embed URL:
+                    // e.g. https://www.instagram.com/reel/ABC123/embed/
+                    // strip username segment if present: /username/reel/CODE/ → /reel/CODE/
+                    $igEmbedUrl = preg_replace('#instagram\.com/[^/]+/(reel|p|tv)/([^/]+)/#', 'instagram.com/$1/$2/embed/', $igLink);
+                    // if URL already has /embed/ no change needed
+                    if (!str_contains($igEmbedUrl, '/embed/')) {
+                    $igEmbedUrl = $igLink . 'embed/';
+                    }
+                    @endphp
+                    <div class="mt-8 flex justify-center w-full">
+                        <div style="max-width:500px; width:100%; border-radius:15px; overflow:hidden; box-shadow:0 0 1px rgba(0,0,0,.5),0 1px 10px rgba(0,0,0,.15);">
+                            <iframe src="{{ $igEmbedUrl }}"
+                                width="100%"
+                                height="640"
+                                frameborder="0"
+                                scrolling="no"
+                                allowtransparency="true"
+                                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                                loading="lazy"
+                                style="background:#fff; display:block;">
+                            </iframe>
+                        </div>
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>
