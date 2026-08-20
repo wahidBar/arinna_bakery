@@ -16,11 +16,11 @@
 @include('partials.breadcrumb', ['items' => [['label' => 'Katalog Produk']]])
 {{-- Cover / Header --}}
 <div class="relative bg-[#e9ebf2] min-h-[500px] flex flex-col justify-center items-center py-20 bg-cover bg-center overflow-hidden">
-    <div class="absolute inset-0 opacity-[0.05] grayscale" style="background-image: url('{{ asset('assets/img/category/ban-cat.png') }}'); background-size: cover; background-position: center;"></div>
+    <div class="absolute inset-0 opacity-[0.05] grayscale" style="background-image: url('{{ asset('assets/img/hero/arinna_hero.png') }}'); background-size: cover; background-position: center;"></div>
 
     <div class="relative z-10 text-center flex flex-col items-center mt-10">
         <div class="mb-4 bg-white p-4 rounded-full shadow-lg">
-            <img src="{{ asset('assets/img/logo/logo.png') }}" alt="Logo" class="w-20 md:w-24">
+            <img src="{{ asset('build/assets/img/logo/logo.png') }}" alt="Logo" class="w-20 md:w-24">
         </div>
         <h2 class="font-catalog-header text-4xl md:text-5xl font-bold text-stone-900 mb-2 italic">Katalog</h2>
         <h1 class="font-display text-6xl md:text-8xl font-black text-[#002159] uppercase mb-6 tracking-wide">PRODUK</h1>
@@ -115,7 +115,7 @@
                     @if(isset($randomBlog) && $randomBlog->thumbnail)
                     <img src="{{ asset('storage/' . $randomBlog->thumbnail) }}" alt="{{ $randomBlog->title }}" class="w-full h-full object-cover rounded-[15px] max-[767px]:hidden min-h-[250px]">
                     @else
-                    <img src="{{ asset('assets/img/newsletter/newsletter.jpg') }}" alt="newsletter" class="w-full h-full object-cover rounded-[15px] max-[767px]:hidden min-h-[250px]">
+                    <img src="{{ asset('build/assets/img/newsletter/newsletter.jpg') }}" alt="newsletter" class="w-full h-full object-cover rounded-[15px] max-[767px]:hidden min-h-[250px]">
                     @endif
                 </div>
                 <div class="min-[768px]:w-[50%] w-full px-[12px]">

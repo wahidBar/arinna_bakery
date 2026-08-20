@@ -187,7 +187,7 @@ defineProps<{
     position: relative;
     display: none;
     flex: 1;
-    background: url('/assets/img/category/ban-cat.png') center/cover no-repeat;
+    background: url('/assets/img/hero/arinna_hero.png') center/cover no-repeat;
     overflow: hidden;
 }
 

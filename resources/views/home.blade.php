@@ -142,7 +142,7 @@
 
             <div class="min-[992px]:w-[41.66%] w-full px-[12px] mb-[24px]">
                 <div class="bb-category-img relative max-[991px]:hidden">
-                    <img src="{{ asset('assets/img/category/ban-cat.png') }}" alt="category" class="w-full rounded-[30px]">
+                    <img src="{{ asset('build/assets/img/hero/arinna_hero.png') }}" alt="category" class="w-full rounded-[30px]">
                     <div class="bb-offers py-[5px] px-[15px] absolute top-[20px] right-[20px] bg-[#000] opacity-[0.8] rounded-[15px]">
                         <span class="text-[14px] font-normal text-[#fff]">50% Off</span>
                     </div>
@@ -161,6 +161,7 @@
                     'products' => fn ($q) => $q->where('is_active', true),
                     ])
                     ->where('is_active', true)
+                    ->where('type', 'product')
                     ->orderBy('sort_order')
                     ->take(12)
                     ->get();
@@ -379,7 +380,7 @@
                                 alt="{{ $product->name }}"
                                 class="max-w-max w-[280px] h-[280px] object-contain max-[1399px]:w-[230px] max-[1399px]:h-[230px] max-[1199px]:w-[140px] max-[1199px]:h-[140px] max-[991px]:w-[280px] max-[991px]:h-[280px] max-[767px]:h-[200px] max-[767px]:w-[200px] max-[575px]:w-full max-[575px]:h-[auto] max-[480px]:w-[calc(100%-70px)]">
                             @else
-                            <img src="{{ asset('assets/img/banner-one/one.png') }}"
+                            <img src="{{ asset('build/assets/img/banner-one/one.png') }}"
                                 alt="{{ $product->name }}"
                                 class="max-w-max w-[280px] h-[280px] object-contain max-[1399px]:w-[230px] max-[1399px]:h-[230px] max-[1199px]:w-[140px] max-[1199px]:h-[140px] max-[991px]:w-[280px] max-[991px]:h-[280px] max-[767px]:h-[200px] max-[767px]:w-[200px] max-[575px]:w-full max-[575px]:h-[auto] max-[480px]:w-[calc(100%-70px)]">
                             @endif
@@ -441,7 +442,7 @@
                                 alt="{{ $product->name }}"
                                 class="max-w-max w-[280px] h-[280px] object-contain max-[1399px]:w-[230px] max-[1399px]:h-[230px] max-[1199px]:w-[140px] max-[1199px]:h-[140px] max-[991px]:w-[280px] max-[991px]:h-[280px] max-[767px]:h-[200px] max-[767px]:w-[200px] max-[575px]:w-full max-[575px]:h-[auto] max-[480px]:w-[calc(100%-70px)]">
                             @else
-                            <img src="{{ asset('assets/img/banner-one/two.png') }}"
+                            <img src="{{ asset('build/assets/img/banner-one/two.png') }}"
                                 alt="{{ $product->name }}"
                                 class="max-w-max w-[280px] h-[280px] object-contain max-[1399px]:w-[230px] max-[1399px]:h-[230px] max-[1199px]:w-[140px] max-[1199px]:h-[140px] max-[991px]:w-[280px] max-[991px]:h-[280px] max-[767px]:h-[200px] max-[767px]:w-[200px] max-[575px]:w-full max-[575px]:h-[auto] max-[480px]:w-[calc(100%-70px)]">
                             @endif
@@ -938,7 +939,7 @@
     <div class="bb-popnews-close transition-all duration-[0.3s] ease-in-out w-[16px] h-[20px] absolute top-[-5px] right-[27px] bg-[#e04e4eb3] rounded-[10px] cursor-pointer hover:bg-[#e04e4e]" title="Tutup"></div>
     <div class="flex flex-wrap mx-[-12px]">
         <div class="min-[768px]:w-[50%] w-full px-[12px]">
-            <img src="{{ asset('assets/img/category/ban-cat.png') }}" alt="newsletter" class="w-full rounded-[15px] max-[767px]:hidden">
+            <img src="{{ asset('build/assets/img/hero/arinna_hero.png') }}" alt="newsletter" class="w-full rounded-[15px] max-[767px]:hidden">
         </div>
         <div class="min-[768px]:w-[50%] w-full px-[12px]">
             <div class="bb-popnews-box-content h-full flex flex-col items-center justify-center">

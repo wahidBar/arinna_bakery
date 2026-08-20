@@ -11,7 +11,7 @@
 <section class="relative bg-[#1a2236] overflow-hidden">
     {{-- Background image --}}
     <div class="absolute inset-0">
-        <img src="{{ asset('assets/img/banner-one/about.png') }}"
+        <img src="{{ asset('build/assets/img/hero/about.png') }}"
              alt="Arinna Hidayah Bakery"
              class="w-full h-full object-cover object-center opacity-60">
         <div class="absolute inset-0 bg-gradient-to-r from-[#1a2236]/90 via-[#1a2236]/50 to-transparent"></div>
@@ -76,7 +76,7 @@
                         </div>
                         {{-- Image right --}}
                         <div class="min-[576px]:w-[45%] w-full">
-                            <img src="{{ asset('assets/img/banner-one/about.png') }}"
+                            <img src="{{ asset('build/assets/img/hero/about.png') }}"
                                  alt="Cerita Arinna Hidayah Bakery"
                                  class="w-full h-full object-cover min-h-[180px]">
                         </div>
@@ -183,7 +183,7 @@
             <div class="min-[992px]:w-[50%] w-full px-[12px] mb-[30px] min-[992px]:mb-[0]"
                  data-aos="fade-right" data-aos-duration="800">
                 <div class="relative rounded-[24px] overflow-hidden shadow-md">
-                    <img src="{{ asset('assets/img/banner-one/one.png') }}"
+                    <img src="{{ asset('build/assets/img/banner-one/one.png') }}"
                          alt="Toko Arinna Hidayah Bakery"
                          class="w-full object-cover aspect-[4/3]">
                     {{-- Floating badge --}}

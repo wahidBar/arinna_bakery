@@ -40,7 +40,7 @@
                         <div class="cols bb-logo-detail flex max-[767px]:justify-between z-[2]">
                             <div class="header-logo flex items-center max-[575px]:justify-center">
                                 <a href="{{ route('home') }}" class="flex items-center gap-[12px]">
-                                    <img src="{{ asset('assets/img/logo/logo.png') }}" alt="Arinna Bakery Hidayah" class="w-[64px] h-[64px] max-[991px]:w-[52px] max-[991px]:h-[52px] max-[575px]:w-[46px] max-[575px]:h-[46px] object-contain">
+                                    <img src="{{ asset('build/assets/img/logo/logo.png') }}" alt="Arinna Bakery Hidayah" class="w-[64px] h-[64px] max-[991px]:w-[52px] max-[991px]:h-[52px] max-[575px]:w-[46px] max-[575px]:h-[46px] object-contain">
                                     <span class="flex flex-col leading-[1.1]">
                                         <span class="font-Poppins text-[13px] italic font-light text-[#777] tracking-[0.05rem] max-[991px]:text-[11px]">Bakery</span>
                                         <span class="font-quicksand text-[24px] font-bold text-[#3d4750] tracking-[0.03rem] max-[991px]:text-[19px] whitespace-nowrap">
@@ -238,9 +238,9 @@
         <button type="button" class="bb-category-close transition-all duration-[0.3s] ease-in-out w-[16px] h-[20px] absolute top-[-5px] right-[27px] bg-[#e04e4eb3] rounded-[10px] cursor-pointer hover:bg-[#e04e4e]" title="Close"></button>
         <div class="w-full mx-auto">
             <div class="flex flex-wrap w-full mb-[-24px]">
-                
+
                 @php
-                $sidebarCategories = \App\Models\Category::where('is_active', true)->orderBy('sort_order')->get();
+                $sidebarCategories = \App\Models\Category::where('is_active', true)->where('type', 'product')->orderBy('sort_order')->get();
                 $bgColors = ['#fef1f1', '#e1fcf2', '#f4f1fe', '#fbf9e4'];
                 $sidebarProducts = \App\Models\Product::where('is_active', true)->latest()->take(6)->get();
                 @endphp
