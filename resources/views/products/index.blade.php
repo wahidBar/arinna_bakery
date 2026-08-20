@@ -12,6 +12,8 @@
 
 @section('content')
 
+
+@include('partials.breadcrumb', ['items' => [['label' => 'Katalog Produk']]])
 {{-- Cover / Header --}}
 <div class="relative bg-[#e9ebf2] min-h-[500px] flex flex-col justify-center items-center py-20 bg-cover bg-center overflow-hidden">
     <div class="absolute inset-0 opacity-[0.05] grayscale" style="background-image: url('{{ asset('assets/img/category/ban-cat.png') }}'); background-size: cover; background-position: center;"></div>
@@ -27,8 +29,6 @@
         </div>
     </div>
 </div>
-
-@include('partials.breadcrumb', ['items' => [['label' => 'Katalog Produk']]])
 
 <div class="mx-auto max-w-7xl px-4 py-8 md:py-10">
     <div class="grid grid-cols-1 gap-8 lg:grid-cols-[280px_minmax(0,1fr)]">
