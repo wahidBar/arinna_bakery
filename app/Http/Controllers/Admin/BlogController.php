@@ -7,21 +7,20 @@ use App\Http\Requests\Admin\StoreBlogRequest;
 use App\Models\Blog;
 use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class BlogController extends Controller
 {
     public function index(): View
     {
-        $blogs = Blog::with('category', 'author')->latest()->paginate(15);
+        $blogs = Blog::with('category', 'author')->withCount('comments')->latest()->paginate(15);
 
         return view('admin.blogs.index', compact('blogs'));
     }
 
     public function create(): View
     {
-        $categories = Category::orderBy('name')->get();
+        $categories = Category::where('type', 'blog')->orderBy('name')->get();
 
         return view('admin.blogs.create', compact('categories'));
     }
@@ -29,7 +28,6 @@ class BlogController extends Controller
     public function store(StoreBlogRequest $request): RedirectResponse
     {
         $data = $request->validated();
-        $data['slug'] = $data['slug'] ?? Str::slug($data['title']);
         $data['author_id'] = auth()->id();
         $data['is_published'] = $request->boolean('is_published');
         $data['thumbnail'] = $request->file('thumbnail')->store('blogs', 'public');
@@ -41,7 +39,7 @@ class BlogController extends Controller
 
     public function edit(Blog $blog): View
     {
-        $categories = Category::orderBy('name')->get();
+        $categories = Category::where('type', 'blog')->orderBy('name')->get();
 
         return view('admin.blogs.edit', compact('blog', 'categories'));
     }
@@ -49,7 +47,6 @@ class BlogController extends Controller
     public function update(StoreBlogRequest $request, Blog $blog): RedirectResponse
     {
         $data = $request->validated();
-        $data['slug'] = $data['slug'] ?? $blog->slug;
         $data['is_published'] = $request->boolean('is_published');
 
         if ($request->hasFile('thumbnail')) {

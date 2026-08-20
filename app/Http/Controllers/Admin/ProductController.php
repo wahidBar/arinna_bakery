@@ -21,7 +21,7 @@ class ProductController extends Controller
         $query = Product::with(['category', 'primaryImage']);
 
         if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->input('search') . '%');
+            $query->where('name', 'like', '%'.$request->input('search').'%');
         }
 
         if ($request->filled('category')) {
@@ -29,14 +29,14 @@ class ProductController extends Controller
         }
 
         $products = $query->latest()->paginate(15)->withQueryString();
-        $categories = Category::orderBy('name')->get();
+        $categories = Category::where('type', 'product')->orderBy('name')->get();
 
         return view('admin.products.index', compact('products', 'categories'));
     }
 
     public function create(): View
     {
-        $categories = Category::orderBy('name')->get();
+        $categories = Category::where('type', 'product')->orderBy('name')->get();
 
         return view('admin.products.create', compact('categories'));
     }
@@ -44,7 +44,7 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request): RedirectResponse
     {
         $data = $request->validated();
-        $data['slug'] = $data['slug'] ?? Str::slug($data['name']) . '-' . random_int(1000, 9999);
+        $data['slug'] = $data['slug'] ?? Str::slug($data['name']).'-'.random_int(1000, 9999);
         $data['is_active'] = $request->boolean('is_active');
         $data['is_featured'] = $request->boolean('is_featured');
         $data['is_new'] = $request->boolean('is_new');
@@ -78,7 +78,7 @@ class ProductController extends Controller
     public function edit(Product $product): View
     {
         $product->load('images');
-        $categories = Category::orderBy('name')->get();
+        $categories = Category::where('type', 'product')->orderBy('name')->get();
 
         return view('admin.products.edit', compact('product', 'categories'));
     }

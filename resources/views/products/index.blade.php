@@ -28,6 +28,8 @@
     </div>
 </div>
 
+@include('partials.breadcrumb', ['items' => [['label' => 'Katalog Produk']]])
+
 <div class="mx-auto max-w-7xl px-4 py-8 md:py-10">
     <div class="grid grid-cols-1 gap-8 lg:grid-cols-[280px_minmax(0,1fr)]">
 
@@ -103,6 +105,7 @@
                 @include('products.partials.grid', ['products' => $products])
             </div>
         </div>
+
         {{-- ============ POPUP BLOG (Pop-News) ============ --}}
         <div class="bb-popnews-bg hidden fixed top-0 left-0 w-full h-full bg-[#00000080] z-[24]"></div>
         <div class="bb-popnews-box w-full max-w-[600px] p-[24px] fixed left-[50%] top-[50%] bg-[#fff] hidden z-[25] text-center rounded-[15px] overflow-hidden max-[767px]:w-[90%]">

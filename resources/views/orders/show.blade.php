@@ -8,6 +8,12 @@
 @endphp
 
 @section('content')
+@include('partials.breadcrumb', [
+    'items' => [
+        ['label' => 'Pesanan Saya', 'url' => route('orders.index')],
+        ['label' => $order->invoice_no],
+    ]
+])
 <div class="max-w-3xl mx-auto px-4 py-10">
     <a href="{{ route('orders.index') }}" class="text-sm text-amber-700 hover:underline">&larr; Kembali ke Pesanan Saya</a>
 

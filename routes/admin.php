@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductReviewController;
 use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Admin\TeamMemberController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -69,7 +71,11 @@ Route::prefix('settings')->name('settings.')->group(function () {
     Route::resource('sliders', SliderController::class)->except(['show']);
 
     // Blog / News
+    Route::resource('blog-categories', BlogCategoryController::class)->except(['show']);
     Route::resource('blogs', BlogController::class)->except(['show']);
+
+    // Halaman Tentang Kami — Tim
+    Route::resource('team-members', TeamMemberController::class)->except(['show']);
 
     // Informasi Umum (site_settings)
     Route::get('/general', [SiteSettingController::class, 'edit'])->name('general.edit');

@@ -95,12 +95,24 @@
     </div>
 
     {{-- Ringkasan --}}
-    <div>
-        <label class="block text-sm font-medium text-stone-700 mb-1.5">Ringkasan (Excerpt)</label>
-        <textarea name="excerpt" rows="2" maxlength="500"
-                  class="w-full rounded-lg border-amber-200 focus:border-[#b45309] focus:ring-[#b45309] text-sm"
-                  placeholder="Ringkasan singkat yang tampil di daftar artikel...">{{ old('excerpt', $blog->excerpt ?? '') }}</textarea>
-        @error('excerpt') <p class="mt-1 text-xs text-rose-500">{{ $message }}</p> @enderror
+    {{-- Ringkasan --}}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div>
+            <label class="block text-sm font-medium text-stone-700 mb-1.5">Ringkasan (Excerpt)</label>
+            <textarea name="excerpt" rows="2" maxlength="500"
+                      class="w-full rounded-lg border-amber-200 focus:border-[#b45309] focus:ring-[#b45309] text-sm"
+                      placeholder="Ringkasan singkat yang tampil di daftar artikel...">{{ old('excerpt', $blog->excerpt ?? '') }}</textarea>
+            @error('excerpt') <p class="mt-1 text-xs text-rose-500">{{ $message }}</p> @enderror
+        </div>
+        
+        <div>
+            <label class="block text-sm font-medium text-stone-700 mb-1.5">Link Embed Instagram (Opsional)</label>
+            <input type="url" name="instagram_link" value="{{ old('instagram_link', $blog->instagram_link ?? '') }}"
+                   class="w-full rounded-lg border-amber-200 focus:border-[#b45309] focus:ring-[#b45309] text-sm"
+                   placeholder="https://www.instagram.com/reel/...">
+            <p class="mt-1 text-xs text-stone-400">Contoh: https://www.instagram.com/arinnahidayah_bakery/reel/DbpQd1rSHGZ/</p>
+            @error('instagram_link') <p class="mt-1 text-xs text-rose-500">{{ $message }}</p> @enderror
+        </div>
     </div>
 
     {{-- Konten (rich text — TinyMCE) --}}

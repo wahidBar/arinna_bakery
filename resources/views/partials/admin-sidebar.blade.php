@@ -89,9 +89,17 @@
                    class="block px-3 py-2 rounded-lg text-sm {{ request()->routeIs('admin.settings.sliders.*') ? 'bg-[#b45309] text-[#1c1917] font-semibold' : 'text-white/70 hover:bg-white/10' }}">
                     Slider Home
                 </a>
+                <a href="{{ route('admin.settings.blog-categories.index') }}"
+                   class="block px-3 py-2 rounded-lg text-sm {{ request()->routeIs('admin.settings.blog-categories.*') ? 'bg-[#b45309] text-[#1c1917] font-semibold' : 'text-white/70 hover:bg-white/10' }}">
+                    Kategori Blog
+                </a>
                 <a href="{{ route('admin.settings.blogs.index') }}"
                    class="block px-3 py-2 rounded-lg text-sm {{ request()->routeIs('admin.settings.blogs.*') ? 'bg-[#b45309] text-[#1c1917] font-semibold' : 'text-white/70 hover:bg-white/10' }}">
                     Blog / News
+                </a>
+                <a href="{{ route('admin.settings.team-members.index') }}"
+                   class="block px-3 py-2 rounded-lg text-sm {{ request()->routeIs('admin.settings.team-members.*') ? 'bg-[#b45309] text-[#1c1917] font-semibold' : 'text-white/70 hover:bg-white/10' }}">
+                    Tim Kami
                 </a>
                 <a href="{{ route('admin.settings.general.edit') }}"
                    class="block px-3 py-2 rounded-lg text-sm {{ request()->routeIs('admin.settings.general.*') ? 'bg-[#b45309] text-[#1c1917] font-semibold' : 'text-white/70 hover:bg-white/10' }}">

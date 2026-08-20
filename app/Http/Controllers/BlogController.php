@@ -11,33 +11,59 @@ class BlogController extends Controller
 {
     public function index(Request $request): View
     {
-        $query = Blog::with('category', 'author')
-            ->where('is_published', true)
-            ->whereNotNull('published_at');
+        $query = Blog::with(['category', 'author', 'comments' => function ($q) {
+            $q->whereNull('parent_id')->with('replies')->latest();
+        }])->where('is_published', true);
 
         if ($request->filled('category')) {
             $query->whereHas('category', fn ($q) => $q->where('slug', $request->input('category')));
         }
 
-        $blogs = $query->latest('published_at')->paginate(9)->withQueryString();
-        $categories = Category::whereHas('blogs')->get();
+        $paginator = $query->latest('published_at')->paginate(1)->withQueryString();
+        $blog = $paginator->first();
 
-        return view('blog.index', compact('blogs', 'categories'));
+        $recentBlogs = Blog::where('is_published', true)
+            ->latest('published_at')
+            ->take(4)
+            ->get();
+
+        $categories = Category::where('type', 'blog')->withCount('blogs')->get();
+
+        return view('blog.show', compact('blog', 'paginator', 'recentBlogs', 'categories'));
     }
 
     public function show(string $slug): View
     {
-        $blog = Blog::with('category', 'author')
+        // For direct links, we don't paginate, just show the specific blog.
+        $blog = Blog::with(['category', 'author', 'comments' => function ($q) {
+            $q->whereNull('parent_id')->with('replies')->latest();
+        }])
             ->where('slug', $slug)
             ->where('is_published', true)
             ->firstOrFail();
 
-        $relatedBlogs = Blog::where('category_id', $blog->category_id)
+        $recentBlogs = Blog::where('is_published', true)
             ->where('id', '!=', $blog->id)
-            ->where('is_published', true)
-            ->take(3)
+            ->latest('published_at')
+            ->take(4)
             ->get();
 
-        return view('blog.show', compact('blog', 'relatedBlogs'));
+        $categories = Category::where('type', 'blog')->withCount('blogs')->get();
+
+        return view('blog.show', compact('blog', 'recentBlogs', 'categories'));
+    }
+
+    public function storeComment(Request $request, Blog $blog)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'message' => 'required|string',
+            'parent_id' => 'nullable|exists:blog_comments,id',
+        ]);
+
+        $blog->comments()->create($request->only('name', 'email', 'message', 'parent_id'));
+
+        return back()->with('success', 'Comment has been added successfully.');
     }
 }

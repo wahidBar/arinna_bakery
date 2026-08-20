@@ -13,6 +13,7 @@
 @endphp
 
 @section('content')
+@include('partials.breadcrumb', ['items' => [['label' => 'Pesanan Saya']]])
 <div class="max-w-4xl mx-auto px-4 py-10">
     <h1 class="font-display text-3xl font-bold text-stone-900 mb-8">Pesanan Saya</h1>
 

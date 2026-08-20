@@ -24,6 +24,7 @@
                         <th class="px-5 py-3 text-left">Artikel</th>
                         <th class="px-5 py-3 text-left">Kategori</th>
                         <th class="px-5 py-3 text-left">Penulis</th>
+                        <th class="px-5 py-3 text-left">Komentar</th>
                         <th class="px-5 py-3 text-left">Publish</th>
                         <th class="px-5 py-3 text-left">Status</th>
                         <th class="px-5 py-3 text-right">Aksi</th>
@@ -45,6 +46,12 @@
                             <td class="px-5 py-3 text-stone-600">{{ $blog->category?->name ?? '—' }}</td>
                             <td class="px-5 py-3 text-stone-600">{{ $blog->author?->name ?? '—' }}</td>
                             <td class="px-5 py-3 text-stone-600">
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-600">
+                                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+                                    {{ $blog->comments_count }}
+                                </span>
+                            </td>
+                            <td class="px-5 py-3 text-stone-600">
                                 {{ $blog->published_at?->translatedFormat('d M Y') ?? '—' }}
                             </td>
                             <td class="px-5 py-3">
@@ -56,6 +63,8 @@
                             </td>
                             <td class="px-5 py-3">
                                 <div class="flex items-center justify-end gap-2">
+                                    <a href="{{ route('blog.show', $blog->slug) }}" target="_blank"
+                                       class="text-xs font-medium text-blue-500 hover:underline">Lihat</a>
                                     <a href="{{ route('admin.settings.blogs.edit', $blog) }}"
                                        class="text-xs font-medium text-[#b45309] hover:underline">Edit</a>
                                     <form action="{{ route('admin.settings.blogs.destroy', $blog) }}" method="POST"
@@ -69,7 +78,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-5 py-10 text-center text-stone-400">
+                            <td colspan="7" class="px-5 py-10 text-center text-stone-400">
                                 Belum ada artikel. Klik "Tulis Artikel" untuk membuat yang pertama.
                             </td>
                         </tr>

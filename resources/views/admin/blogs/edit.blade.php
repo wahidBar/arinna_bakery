@@ -28,16 +28,17 @@
                     class="text-sm font-medium text-stone-500 hover:text-[#6c7fd8] px-5 py-2.5">
                     Batal
                 </a>
-                <form action="{{ route('admin.settings.blogs.destroy', $blog) }}" method="POST"
-                    onsubmit="return confirm('Hapus artikel &quot;{{ $blog->title }}&quot;? Tindakan ini tidak bisa dibatalkan.')"
-                    class="ml-auto">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="text-sm font-medium text-rose-500 hover:text-rose-700 px-5 py-2.5">
-                        Hapus Artikel
-                    </button>
-                </form>
+                <button type="button" 
+                        onclick="if(confirm('Hapus artikel &quot;{{ addslashes($blog->title) }}&quot;? Tindakan ini tidak bisa dibatalkan.')) document.getElementById('delete-blog-form').submit();"
+                        class="ml-auto text-sm font-medium text-rose-500 hover:text-rose-700 px-5 py-2.5">
+                    Hapus Artikel
+                </button>
             </div>
+        </form>
+        
+        <form id="delete-blog-form" action="{{ route('admin.settings.blogs.destroy', $blog) }}" method="POST" class="hidden">
+            @csrf
+            @method('DELETE')
         </form>
     </div>
 </div>

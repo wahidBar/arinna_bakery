@@ -112,13 +112,12 @@
     var BryMainSlider = new Swiper(".hero-slider.swiper-container", {
         loop: true,
         centeredSlides: true,
-        speed: 1000,
         parallax: true,
+        effect: 'fade',
         autoplay: {
             delay: 5000,
+            disableOnInteraction: false,
         },
-        effect: 'fade',
-        autoplay: false,
         autoHeight: true,
         speed: 2500,
         pagination: {

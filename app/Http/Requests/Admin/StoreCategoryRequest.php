@@ -20,7 +20,7 @@ class StoreCategoryRequest extends FormRequest
             'parent_id' => ['nullable', 'exists:categories,id', Rule::notIn([$categoryId])],
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255', Rule::unique('categories', 'slug')->ignore($categoryId)],
-            'icon' => ['nullable', 'image', 'max:1024'],
+            'icon' => ['nullable', 'image', 'max:2048'],
             'is_active' => ['boolean'],
             'sort_order' => ['nullable', 'integer'],
         ];

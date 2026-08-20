@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AboutController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
@@ -28,6 +29,10 @@ Route::get('/products/{slug}', [ProductController::class, 'show'])->name('produc
 // Blog
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
+Route::post('/blog/{blog}/comments', [BlogController::class, 'storeComment'])->name('blog.comments.store');
+
+// Tentang Kami
+Route::get('/about', [AboutController::class, 'index'])->name('about.index');
 
 // Kontak
 Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');

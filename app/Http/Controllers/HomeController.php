@@ -65,6 +65,12 @@ class HomeController extends Controller
             ->take(4)
             ->get();
 
+        // ambil satu blog random untuk popup (bisa diganti nanti dengan random berdasarkan kunjungan)
+        $randomBlog = Blog::where('is_published', true)
+            ->whereNotNull('published_at')
+            ->inRandomOrder()
+            ->first();
+
         return view('home', compact(
             'sliders',
             'flashsaleProducts',
@@ -72,7 +78,8 @@ class HomeController extends Controller
             'featuredProducts',
             'newestProducts',
             'productTabCategories',
-            'latestBlogs'
+            'latestBlogs',
+            'randomBlog'
         ));
     }
 }

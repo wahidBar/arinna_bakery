@@ -3,8 +3,10 @@
 @section('title', 'Blog — Arinna Hidayah Bakery')
 
 @section('content')
+@include('partials.breadcrumb', ['items' => [['label' => 'Blog & Berita']]])
+
 <div class="max-w-7xl mx-auto px-4 py-10">
-    <h1 class="font-display text-3xl font-bold text-stone-900 mb-8">Blog & Berita</h1>
+    <h1 class="font-display text-3xl font-bold text-stone-900 mb-8">Blog &amp; Berita</h1>
 
     <div class="flex gap-2 mb-8 flex-wrap">
         <a href="{{ route('blog.index') }}"

@@ -14,6 +14,7 @@ class Blog extends Model
         'title',
         'slug',
         'thumbnail',
+        'instagram_link',
         'content',
         'excerpt',
         'category_id',
@@ -38,5 +39,10 @@ class Blog extends Model
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'author_id');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(BlogComment::class)->whereNull('parent_id')->latest();
     }
 }
