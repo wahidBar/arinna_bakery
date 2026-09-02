@@ -15,6 +15,8 @@ RUN apk add --no-cache \
 # Install PHP extensions required
 RUN docker-php-ext-install bcmath exif gd mbstring pcntl pdo pdo_mysql xml
 
+RUN printf "upload_max_filesize=8M\npost_max_size=8M\n" > /usr/local/etc/php/conf.d/uploads.ini
+
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
@@ -46,6 +48,8 @@ RUN apk add --no-cache \
 
 # Install PHP extensions
 RUN docker-php-ext-install bcmath exif gd mbstring pcntl pdo pdo_mysql xml
+
+RUN printf "upload_max_filesize=8M\npost_max_size=8M\n" > /usr/local/etc/php/conf.d/uploads.ini
 
 # Set working directory
 WORKDIR /var/www/html
