@@ -19,14 +19,17 @@
 
         {{-- Left 8-cols: Sortable Menu List --}}
         <div class="lg:col-span-8 materio-card p-6">
+            @include('partials.admin-bulk-delete', ['bulkDeleteId' => 'bulk-delete-menus', 'bulkDeleteAction' => route('admin.settings.menus.bulk-destroy'), 'bulkDeleteInputName' => 'menu_ids[]', 'bulkDeleteItemClass' => 'menu-selection', 'bulkDeleteSelectAllId' => 'select-all-menus', 'bulkDeleteCountId' => 'selected-menus-count', 'bulkDeleteConfirmation' => 'Hapus semua menu yang dipilih?'])
             <h2 class="text-[16px] font-bold text-[#2E263D] dark:text-[#EAEAFF] mb-4 flex items-center gap-2">
                 <i class="ri-drag-drop-line text-[#8C57FF]"></i> Susunan Menu (Tarik untuk mengurutkan)
+                <input type="checkbox" id="select-all-menus" class="ml-auto w-4 h-4 rounded border-stone-300 text-[#8C57FF] focus:ring-[#8C57FF]" aria-label="Pilih semua menu">
             </h2>
 
             <ul id="menu-list" class="space-y-3">
                 @forelse ($menus as $menu)
                     <li data-id="{{ $menu->id }}"
                         class="flex items-center justify-between p-4 rounded-xl border border-black/10 dark:border-white/10 bg-white dark:bg-[#312D4B] hover:border-[#8C57FF] cursor-move transition shadow-sm group">
+                        <input type="checkbox" name="menu_ids[]" value="{{ $menu->id }}" form="bulk-delete-menus" class="menu-selection mr-3 w-4 h-4 rounded border-stone-300 text-[#8C57FF] focus:ring-[#8C57FF]" aria-label="Pilih {{ $menu->label }}">
                         <div class="flex items-center gap-3.5">
                             <i class="ri-draggable text-stone-400 group-hover:text-[#8C57FF] text-xl"></i>
                             <div>

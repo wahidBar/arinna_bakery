@@ -54,10 +54,12 @@
 
     {{-- Blogs Data Table Card --}}
     <div class="materio-card overflow-hidden">
+        @include('partials.admin-bulk-delete', ['bulkDeleteId' => 'bulk-delete-blogs', 'bulkDeleteAction' => route('admin.settings.blogs.bulk-destroy'), 'bulkDeleteInputName' => 'blog_ids[]', 'bulkDeleteItemClass' => 'blog-selection', 'bulkDeleteSelectAllId' => 'select-all-blogs', 'bulkDeleteCountId' => 'selected-blogs-count', 'bulkDeleteConfirmation' => 'Hapus semua artikel yang dipilih?'])
         <div class="overflow-x-auto">
             <table class="w-full text-[14px]">
                 <thead>
                     <tr class="text-left text-[12px] font-bold uppercase tracking-wider text-stone-400 bg-black/[0.02] dark:bg-white/[0.02] border-b border-black/5 dark:border-white/5">
+                        <th class="py-4 pl-6 pr-2 w-12"><input type="checkbox" id="select-all-blogs" form="bulk-delete-blogs" class="w-4 h-4 rounded border-stone-300 text-[#8C57FF] focus:ring-[#8C57FF]" aria-label="Pilih semua artikel"></th>
                         <th class="py-4 px-6">Artikel</th>
                         <th class="py-4 px-4">Kategori</th>
                         <th class="py-4 px-4">Status</th>
@@ -68,6 +70,7 @@
                 <tbody class="divide-y divide-black/5 dark:divide-white/5">
                     @forelse ($blogs as $blog)
                         <tr class="hover:bg-[#8C57FF]/[0.03] transition">
+                            <td class="py-4 pl-6 pr-2"><input type="checkbox" name="blog_ids[]" value="{{ $blog->id }}" form="bulk-delete-blogs" class="blog-selection w-4 h-4 rounded border-stone-300 text-[#8C57FF] focus:ring-[#8C57FF]" aria-label="Pilih {{ $blog->title }}"></td>
                             <td class="py-4 px-6">
                                 <div class="flex items-center gap-4">
                                     <div class="w-14 h-12 rounded-xl border border-black/5 dark:border-white/10 overflow-hidden shrink-0 bg-stone-100 dark:bg-stone-800">
@@ -125,7 +128,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="py-16 text-center text-stone-400 text-[14px]">
+                            <td colspan="6" class="py-16 text-center text-stone-400 text-[14px]">
                                 <i class="ri-article-line text-5xl block mb-2 text-stone-300"></i>
                                 Tidak ada artikel yang ditemukan.
                             </td>

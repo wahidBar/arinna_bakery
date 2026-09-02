@@ -73,4 +73,19 @@ class SliderController extends Controller
 
         return back()->with('success', 'Slider berhasil dihapus.');
     }
+
+    public function bulkDestroy(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'slider_ids' => ['required', 'array', 'min:1'],
+            'slider_ids.*' => ['integer', 'distinct', 'exists:sliders,id'],
+        ]);
+
+        foreach (Slider::whereIn('id', $validated['slider_ids'])->get() as $slider) {
+            \Storage::disk('public')->delete($slider->image);
+            $slider->delete();
+        }
+
+        return redirect()->route('admin.settings.sliders.index')->with('success', count($validated['slider_ids']).' slider berhasil dihapus.');
+    }
 }

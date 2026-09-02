@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\StoreBlogRequest;
 use App\Models\Blog;
 use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class BlogController extends Controller
@@ -66,5 +67,20 @@ class BlogController extends Controller
         $blog->delete();
 
         return back()->with('success', 'Artikel berhasil dihapus.');
+    }
+
+    public function bulkDestroy(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'blog_ids' => ['required', 'array', 'min:1'],
+            'blog_ids.*' => ['integer', 'distinct', 'exists:blogs,id'],
+        ]);
+
+        foreach (Blog::whereIn('id', $validated['blog_ids'])->get() as $blog) {
+            \Storage::disk('public')->delete($blog->thumbnail);
+            $blog->delete();
+        }
+
+        return redirect()->route('admin.settings.blogs.index')->with('success', count($validated['blog_ids']).' artikel berhasil dihapus.');
     }
 }

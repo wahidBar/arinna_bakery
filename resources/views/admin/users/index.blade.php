@@ -51,10 +51,12 @@
 
     {{-- Users Data Table Card --}}
     <div class="materio-card overflow-hidden">
+        @include('partials.admin-bulk-delete', ['bulkDeleteId' => 'bulk-delete-users', 'bulkDeleteAction' => route('admin.users.bulk-destroy'), 'bulkDeleteInputName' => 'user_ids[]', 'bulkDeleteItemClass' => 'user-selection', 'bulkDeleteSelectAllId' => 'select-all-users', 'bulkDeleteCountId' => 'selected-users-count', 'bulkDeleteConfirmation' => 'Hapus semua pengguna yang dipilih?'])
         <div class="overflow-x-auto">
             <table class="w-full text-[14px]">
                 <thead>
                     <tr class="text-left text-[12px] font-bold uppercase tracking-wider text-stone-400 bg-black/[0.02] dark:bg-white/[0.02] border-b border-black/5 dark:border-white/5">
+                        <th class="py-4 pl-6 pr-2 w-12"><input type="checkbox" id="select-all-users" form="bulk-delete-users" class="w-4 h-4 rounded border-stone-300 text-[#8C57FF] focus:ring-[#8C57FF]" aria-label="Pilih semua pengguna"></th>
                         <th class="py-4 px-6">Pengguna</th>
                         <th class="py-4 px-4">Role</th>
                         <th class="py-4 px-4">Kontak HP</th>
@@ -66,6 +68,7 @@
                 <tbody class="divide-y divide-black/5 dark:divide-white/5">
                     @forelse ($users as $user)
                         <tr class="hover:bg-[#8C57FF]/[0.03] transition">
+                            <td class="py-4 pl-6 pr-2"><input type="checkbox" name="user_ids[]" value="{{ $user->id }}" form="bulk-delete-users" class="user-selection w-4 h-4 rounded border-stone-300 text-[#8C57FF] focus:ring-[#8C57FF]" aria-label="Pilih {{ $user->name }}"></td>
                             {{-- User Avatar + Name + Email --}}
                             <td class="py-4 px-6">
                                 <div class="flex items-center gap-3.5">
@@ -137,7 +140,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="py-16 text-center text-stone-400 text-[14px]">
+                            <td colspan="7" class="py-16 text-center text-stone-400 text-[14px]">
                                 <i class="ri-user-unfollow-line text-5xl block mb-2 text-stone-300"></i>
                                 Tidak ada data pengguna yang cocok.
                             </td>

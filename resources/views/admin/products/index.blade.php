@@ -54,10 +54,27 @@
 
     {{-- Products Data Table Card --}}
     <div class="materio-card overflow-hidden">
+        <div class="flex items-center justify-between gap-4 px-6 py-4 border-b border-black/5 dark:border-white/5">
+            <form id="bulk-delete-products" method="POST" action="{{ route('admin.products.bulk-destroy') }}" onsubmit="return confirm('Hapus semua produk yang dipilih?')">
+                @csrf
+                @method('DELETE')
+                <button type="submit" id="bulk-delete-button" disabled
+                        class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-[13px] font-semibold text-rose-500 bg-rose-500/10 hover:bg-rose-500/20 disabled:cursor-not-allowed disabled:opacity-40 transition">
+                    <i class="ri-delete-bin-line text-lg"></i>
+                    Hapus Terpilih (<span id="selected-products-count">0</span>)
+                </button>
+            </form>
+            <span class="text-[12px] text-stone-400">Pilih produk untuk menghapus beberapa sekaligus</span>
+        </div>
         <div class="overflow-x-auto">
             <table class="w-full text-[14px]">
                 <thead>
                     <tr class="text-left text-[12px] font-bold uppercase tracking-wider text-stone-400 bg-black/[0.02] dark:bg-white/[0.02] border-b border-black/5 dark:border-white/5">
+                        <th class="py-4 pl-6 pr-2 w-12">
+                            <input type="checkbox" id="select-all-products" form="bulk-delete-products"
+                                   class="w-4 h-4 rounded border-stone-300 text-[#8C57FF] focus:ring-[#8C57FF]"
+                                   aria-label="Pilih semua produk">
+                        </th>
                         <th class="py-4 px-6">Produk</th>
                         <th class="py-4 px-4">Kategori</th>
                         <th class="py-4 px-4">Harga</th>
@@ -69,6 +86,11 @@
                 <tbody class="divide-y divide-black/5 dark:divide-white/5">
                     @forelse ($products as $product)
                         <tr class="hover:bg-[#8C57FF]/[0.03] transition">
+                            <td class="py-4 pl-6 pr-2">
+                                <input type="checkbox" name="product_ids[]" value="{{ $product->id }}" form="bulk-delete-products"
+                                       class="product-selection w-4 h-4 rounded border-stone-300 text-[#8C57FF] focus:ring-[#8C57FF]"
+                                       aria-label="Pilih {{ $product->name }}">
+                            </td>
                             {{-- Product Image + Name + SKU --}}
                             <td class="py-4 px-6">
                                 <div class="flex items-center gap-4">
@@ -152,7 +174,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="py-16 text-center text-stone-400 text-[14px]">
+                            <td colspan="7" class="py-16 text-center text-stone-400 text-[14px]">
                                 <i class="ri-inbox-line text-5xl block mb-2 text-stone-300"></i>
                                 Tidak ada data produk yang cocok dengan kriteria pencarian.
                             </td>
@@ -170,4 +192,32 @@
     </div>
 
 </div>
+
+@push('scripts')
+<script>
+    const selectAllProducts = document.getElementById('select-all-products');
+    const productSelections = [...document.querySelectorAll('.product-selection')];
+    const bulkDeleteButton = document.getElementById('bulk-delete-button');
+    const selectedProductsCount = document.getElementById('selected-products-count');
+
+    const updateBulkDeleteState = () => {
+        const selectedCount = productSelections.filter((checkbox) => checkbox.checked).length;
+        selectedProductsCount.textContent = selectedCount;
+        bulkDeleteButton.disabled = selectedCount === 0;
+        selectAllProducts.checked = productSelections.length > 0 && selectedCount === productSelections.length;
+        selectAllProducts.indeterminate = selectedCount > 0 && selectedCount < productSelections.length;
+    };
+
+    selectAllProducts.addEventListener('change', () => {
+        productSelections.forEach((checkbox) => {
+            checkbox.checked = selectAllProducts.checked;
+        });
+        updateBulkDeleteState();
+    });
+
+    productSelections.forEach((checkbox) => {
+        checkbox.addEventListener('change', updateBulkDeleteState);
+    });
+</script>
+@endpush
 @endsection

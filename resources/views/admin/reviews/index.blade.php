@@ -34,9 +34,17 @@
     </div>
 
     {{-- Reviews List --}}
+    <form id="bulk-delete-reviews" method="POST" action="{{ route('admin.reviews.bulk-destroy') }}" onsubmit="return confirm('Hapus semua ulasan yang dipilih?')">
+        @csrf @method('DELETE')
+    </form>
+    <div class="flex items-center justify-between gap-4">
+        <button type="submit" form="bulk-delete-reviews" disabled class="bulk-delete-button inline-flex items-center gap-2 px-4 py-2 rounded-xl text-[13px] font-semibold text-rose-500 bg-rose-500/10 disabled:cursor-not-allowed disabled:opacity-40 transition">Hapus Terpilih (<span id="selected-reviews-count">0</span>)</button>
+        <label class="text-[12px] text-stone-400"><input type="checkbox" id="select-all-reviews" class="mr-2 w-4 h-4 rounded border-stone-300 text-[#8C57FF] focus:ring-[#8C57FF]"> Pilih semua ulasan</label>
+    </div>
     <div class="space-y-4">
         @forelse ($reviews as $review)
             <div class="materio-card p-6">
+                <input type="checkbox" name="review_ids[]" value="{{ $review->id }}" form="bulk-delete-reviews" class="review-selection float-right w-4 h-4 rounded border-stone-300 text-[#8C57FF] focus:ring-[#8C57FF]" aria-label="Pilih ulasan">
                 <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-5">
                     <div class="space-y-3 flex-1 min-w-0">
                         {{-- Product & Reviewer Header --}}
@@ -113,4 +121,7 @@
     @endif
 
 </div>
+<script>
+    (() => { const all = document.getElementById('select-all-reviews'); const items = [...document.querySelectorAll('.review-selection')]; const button = document.querySelector('#bulk-delete-reviews + div .bulk-delete-button'); const count = document.getElementById('selected-reviews-count'); const update = () => { const selected = items.filter((item) => item.checked).length; count.textContent = selected; button.disabled = selected === 0; all.checked = items.length > 0 && selected === items.length; }; all.addEventListener('change', () => { items.forEach((item) => { item.checked = all.checked; }); update(); }); items.forEach((item) => item.addEventListener('change', update)); })();
+</script>
 @endsection

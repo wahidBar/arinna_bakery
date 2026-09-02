@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreCategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -85,5 +86,25 @@ class CategoryController extends Controller
         $category->delete();
 
         return redirect()->route('admin.categories.index')->with('success', 'Kategori berhasil dihapus.');
+    }
+
+    public function bulkDestroy(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'category_ids' => ['required', 'array', 'min:1'],
+            'category_ids.*' => ['integer', 'distinct', 'exists:categories,id'],
+        ]);
+        $deletedCount = 0;
+
+        foreach (Category::whereIn('id', $validated['category_ids'])->where('type', 'product')->get() as $category) {
+            if ($category->products()->exists()) {
+                continue;
+            }
+
+            $category->delete();
+            $deletedCount++;
+        }
+
+        return redirect()->route('admin.categories.index')->with('success', $deletedCount.' kategori berhasil dihapus.');
     }
 }

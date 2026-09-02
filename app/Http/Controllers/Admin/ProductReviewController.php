@@ -38,4 +38,16 @@ class ProductReviewController extends Controller
 
         return back()->with('success', 'Review berhasil ditolak dan dihapus.');
     }
+
+    public function bulkDestroy(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'review_ids' => ['required', 'array', 'min:1'],
+            'review_ids.*' => ['integer', 'distinct', 'exists:product_reviews,id'],
+        ]);
+
+        $deletedCount = ProductReview::whereIn('id', $validated['review_ids'])->delete();
+
+        return redirect()->route('admin.reviews.index')->with('success', $deletedCount.' ulasan berhasil dihapus.');
+    }
 }

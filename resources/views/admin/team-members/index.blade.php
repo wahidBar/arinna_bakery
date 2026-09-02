@@ -23,9 +23,17 @@
     </div>
 
     {{-- Team Cards Grid --}}
+    <form id="bulk-delete-members" method="POST" action="{{ route('admin.settings.team-members.bulk-destroy') }}" onsubmit="return confirm('Hapus semua anggota tim yang dipilih?')">
+        @csrf @method('DELETE')
+    </form>
+    <div class="flex items-center justify-between gap-4">
+        <button type="submit" form="bulk-delete-members" disabled class="bulk-delete-button inline-flex items-center gap-2 px-4 py-2 rounded-xl text-[13px] font-semibold text-rose-500 bg-rose-500/10 disabled:cursor-not-allowed disabled:opacity-40 transition">Hapus Terpilih (<span id="selected-members-count">0</span>)</button>
+        <label class="text-[12px] text-stone-400"><input type="checkbox" id="select-all-members" class="mr-2 w-4 h-4 rounded border-stone-300 text-[#8C57FF] focus:ring-[#8C57FF]"> Pilih semua anggota</label>
+    </div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         @forelse ($members as $member)
             <div class="materio-card p-5 flex items-center justify-between gap-4 group hover:border-[#8C57FF]/40 transition">
+                <input type="checkbox" name="member_ids[]" value="{{ $member->id }}" form="bulk-delete-members" class="member-selection mr-2 w-4 h-4 rounded border-stone-300 text-[#8C57FF] focus:ring-[#8C57FF]" aria-label="Pilih {{ $member->name }}">
                 <div class="flex items-center gap-3.5 min-w-0">
                     @if($member->photo)
                         <img src="{{ asset('storage/' . $member->photo) }}" alt="{{ $member->name }}"
@@ -75,4 +83,7 @@
     </div>
 
 </div>
+<script>
+    (() => { const all = document.getElementById('select-all-members'); const items = [...document.querySelectorAll('.member-selection')]; const button = document.querySelector('#bulk-delete-members + div .bulk-delete-button'); const count = document.getElementById('selected-members-count'); const update = () => { const selected = items.filter((item) => item.checked).length; count.textContent = selected; button.disabled = selected === 0; all.checked = items.length > 0 && selected === items.length; }; all.addEventListener('change', () => { items.forEach((item) => { item.checked = all.checked; }); update(); }); items.forEach((item) => item.addEventListener('change', update)); })();
+</script>
 @endsection

@@ -139,6 +139,18 @@ class ProductController extends Controller
         return redirect()->route('admin.products.index')->with('success', 'Produk berhasil dihapus.');
     }
 
+    public function bulkDestroy(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'product_ids' => ['required', 'array', 'min:1'],
+            'product_ids.*' => ['integer', 'distinct', 'exists:products,id'],
+        ]);
+
+        Product::whereIn('id', $validated['product_ids'])->get()->each->delete();
+
+        return redirect()->route('admin.products.index')->with('success', count($validated['product_ids']).' produk berhasil dihapus.');
+    }
+
     /**
      * Dynamic AJAX upload image(s) to product album
      */

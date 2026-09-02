@@ -21,10 +21,21 @@
         </div>
     </div>
 
+    <form id="bulk-delete-sliders" method="POST" action="{{ route('admin.settings.sliders.bulk-destroy') }}" onsubmit="return confirm('Hapus semua slider yang dipilih?')">
+        @csrf
+        @method('DELETE')
+    </form>
+    <div class="flex items-center justify-between gap-4">
+        <button type="submit" form="bulk-delete-sliders" disabled class="bulk-delete-button inline-flex items-center gap-2 px-4 py-2 rounded-xl text-[13px] font-semibold text-rose-500 bg-rose-500/10 disabled:cursor-not-allowed disabled:opacity-40 transition">
+            <i class="ri-delete-bin-line text-lg"></i> Hapus Terpilih (<span id="selected-sliders-count">0</span>)
+        </button>
+        <label class="text-[12px] text-stone-400"><input type="checkbox" id="select-all-sliders" class="mr-2 w-4 h-4 rounded border-stone-300 text-[#8C57FF] focus:ring-[#8C57FF]"> Pilih semua slider</label>
+    </div>
     {{-- Sliders Grid --}}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         @forelse ($sliders as $slider)
             <div class="materio-card overflow-hidden flex flex-col justify-between group">
+                <input type="checkbox" name="slider_ids[]" value="{{ $slider->id }}" form="bulk-delete-sliders" class="slider-selection absolute z-10 mt-3 ml-3 w-4 h-4 rounded border-stone-300 text-[#8C57FF] focus:ring-[#8C57FF]" aria-label="Pilih slider">
                 <div>
                     {{-- Banner Preview --}}
                     <div class="h-44 bg-stone-100 dark:bg-stone-800 relative overflow-hidden">
@@ -77,4 +88,15 @@
     </div>
 
 </div>
+<script>
+    (() => {
+        const all = document.getElementById('select-all-sliders');
+        const items = [...document.querySelectorAll('.slider-selection')];
+        const button = document.querySelector('#bulk-delete-sliders + div .bulk-delete-button');
+        const count = document.getElementById('selected-sliders-count');
+        const update = () => { const selected = items.filter((item) => item.checked).length; count.textContent = selected; button.disabled = selected === 0; all.checked = items.length > 0 && selected === items.length; };
+        all.addEventListener('change', () => { items.forEach((item) => { item.checked = all.checked; }); update(); });
+        items.forEach((item) => item.addEventListener('change', update));
+    })();
+</script>
 @endsection

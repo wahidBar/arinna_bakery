@@ -32,6 +32,20 @@ test('admin products index page can be rendered', function () {
     $response->assertSee('Tambah Produk');
 });
 
+test('admin can bulk delete selected products', function () {
+    $category = Category::factory()->create();
+    $selectedProducts = Product::factory()->count(3)->create(['category_id' => $category->id]);
+    $unselectedProduct = Product::factory()->create(['category_id' => $category->id]);
+
+    $response = $this->actingAs($this->admin)->delete(route('admin.products.bulk-destroy'), [
+        'product_ids' => $selectedProducts->pluck('id')->all(),
+    ]);
+
+    $response->assertRedirect(route('admin.products.index'));
+    $selectedProducts->each(fn (Product $product) => expect($product->fresh()->trashed())->toBeTrue());
+    expect($unselectedProduct->fresh()->trashed())->toBeFalse();
+});
+
 test('admin categories index page can be rendered', function () {
     $response = $this->actingAs($this->admin)->get(route('admin.categories.index'));
     $response->assertStatus(200);

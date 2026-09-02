@@ -23,10 +23,12 @@
 
     {{-- Categories Data Table --}}
     <div class="materio-card overflow-hidden">
+        @include('partials.admin-bulk-delete', ['bulkDeleteId' => 'bulk-delete-categories', 'bulkDeleteAction' => route('admin.categories.bulk-destroy'), 'bulkDeleteInputName' => 'category_ids[]', 'bulkDeleteItemClass' => 'category-selection', 'bulkDeleteSelectAllId' => 'select-all-categories', 'bulkDeleteCountId' => 'selected-categories-count', 'bulkDeleteConfirmation' => 'Hapus semua kategori yang dipilih?'])
         <div class="overflow-x-auto">
             <table class="w-full text-[14px]">
                 <thead>
                     <tr class="text-left text-[12px] font-bold uppercase tracking-wider text-stone-400 bg-black/[0.02] dark:bg-white/[0.02] border-b border-black/5 dark:border-white/5">
+                        <th class="py-4 pl-6 pr-2 w-12"><input type="checkbox" id="select-all-categories" form="bulk-delete-categories" class="w-4 h-4 rounded border-stone-300 text-[#8C57FF] focus:ring-[#8C57FF]" aria-label="Pilih semua kategori"></th>
                         <th class="py-4 px-6">Kategori</th>
                         <th class="py-4 px-4">Slug</th>
                         <th class="py-4 px-4">Kategori Induk</th>
@@ -38,6 +40,7 @@
                 <tbody class="divide-y divide-black/5 dark:divide-white/5">
                     @forelse ($categories as $category)
                         <tr class="hover:bg-[#8C57FF]/[0.03] transition">
+                            <td class="py-4 pl-6 pr-2"><input type="checkbox" name="category_ids[]" value="{{ $category->id }}" form="bulk-delete-categories" class="category-selection w-4 h-4 rounded border-stone-300 text-[#8C57FF] focus:ring-[#8C57FF]" aria-label="Pilih {{ $category->name }}"></td>
                             <td class="py-4 px-6">
                                 <div class="flex items-center gap-3.5">
                                     @if($category->icon)
@@ -97,7 +100,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="py-16 text-center text-stone-400 text-[14px]">
+                            <td colspan="7" class="py-16 text-center text-stone-400 text-[14px]">
                                 <i class="ri-folder-open-line text-5xl block mb-2 text-stone-300"></i>
                                 Belum ada data kategori produk.
                             </td>

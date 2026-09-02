@@ -86,4 +86,16 @@ class TeamMemberController extends Controller
         return redirect()->route('admin.settings.team-members.index')
             ->with('success', 'Anggota tim berhasil dihapus.');
     }
+
+    public function bulkDestroy(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'member_ids' => ['required', 'array', 'min:1'],
+            'member_ids.*' => ['integer', 'distinct', 'exists:team_members,id'],
+        ]);
+
+        $deletedCount = TeamMember::whereIn('id', $validated['member_ids'])->delete();
+
+        return redirect()->route('admin.settings.team-members.index')->with('success', $deletedCount.' anggota tim berhasil dihapus.');
+    }
 }

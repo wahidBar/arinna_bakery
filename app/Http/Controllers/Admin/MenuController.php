@@ -66,4 +66,16 @@ class MenuController extends Controller
 
         return back()->with('success', 'Menu berhasil dihapus.');
     }
+
+    public function bulkDestroy(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'menu_ids' => ['required', 'array', 'min:1'],
+            'menu_ids.*' => ['integer', 'distinct', 'exists:menus,id'],
+        ]);
+
+        $deletedCount = Menu::whereIn('id', $validated['menu_ids'])->delete();
+
+        return back()->with('success', $deletedCount.' menu berhasil dihapus.');
+    }
 }
