@@ -40,6 +40,10 @@ Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.
 
 // Master Produk
 Route::resource('products', ProductController::class)->except(['show']);
+Route::post('/products/{product}/images', [ProductController::class, 'uploadImage'])->name('products.images.store');
+Route::delete('/products/images/{image}', [ProductController::class, 'deleteImage'])->name('products.images.destroy');
+Route::patch('/products/images/{image}/set-primary', [ProductController::class, 'setPrimaryImage'])->name('products.images.primary');
+Route::post('/products/{product}/images/reorder', [ProductController::class, 'reorderImages'])->name('products.images.reorder');
 
 // Master Kategori
 Route::resource('categories', CategoryController::class)->except(['show']);
@@ -71,7 +75,7 @@ Route::prefix('settings')->name('settings.')->group(function () {
     Route::resource('sliders', SliderController::class)->except(['show']);
 
     // Blog / News
-    Route::resource('blog-categories', BlogCategoryController::class)->except(['show']);
+    Route::resource('blog-categories', BlogCategoryController::class)->parameters(['blog-categories' => 'category'])->except(['show']);
     Route::resource('blogs', BlogController::class)->except(['show']);
 
     // Halaman Tentang Kami — Tim

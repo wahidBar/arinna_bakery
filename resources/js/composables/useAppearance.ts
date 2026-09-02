@@ -53,7 +53,7 @@ const getStoredAppearance = () => {
         return null;
     }
 
-    return localStorage.getItem('appearance') as Appearance | null;
+    return (localStorage.getItem('appearance') || localStorage.getItem('mui-mode')) as Appearance | null;
 };
 
 const prefersDark = (): boolean => {

@@ -138,4 +138,96 @@ class ProductController extends Controller
 
         return redirect()->route('admin.products.index')->with('success', 'Produk berhasil dihapus.');
     }
+
+    /**
+     * Dynamic AJAX upload image(s) to product album
+     */
+    public function uploadImage(Request $request, Product $product)
+    {
+        $request->validate([
+            'image' => ['required', 'image', 'max:2048'],
+        ]);
+
+        $file = $request->file('image');
+        $path = $file->store('products', 'public');
+
+        $isFirst = $product->images()->count() === 0;
+        $maxOrder = $product->images()->max('sort_order') ?? 0;
+
+        $image = ProductImage::create([
+            'product_id' => $product->id,
+            'image_path' => $path,
+            'is_primary' => $isFirst,
+            'sort_order' => $maxOrder + 1,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Foto berhasil ditambahkan ke album.',
+            'image' => [
+                'id' => $image->id,
+                'url' => asset('storage/'.$image->image_path),
+                'is_primary' => $image->is_primary,
+                'sort_order' => $image->sort_order,
+            ],
+        ]);
+    }
+
+    /**
+     * Dynamic AJAX delete image from product album
+     */
+    public function deleteImage(ProductImage $image)
+    {
+        $productId = $image->product_id;
+        $wasPrimary = $image->is_primary;
+
+        \Storage::disk('public')->delete($image->image_path);
+        $image->delete();
+
+        // If the deleted image was primary, make the first remaining image primary
+        if ($wasPrimary) {
+            $nextPrimary = ProductImage::where('product_id', $productId)->orderBy('sort_order')->first();
+            if ($nextPrimary) {
+                $nextPrimary->update(['is_primary' => true]);
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Foto berhasil dihapus dari album.',
+        ]);
+    }
+
+    /**
+     * Dynamic AJAX set primary cover image
+     */
+    public function setPrimaryImage(ProductImage $image)
+    {
+        ProductImage::where('product_id', $image->product_id)->update(['is_primary' => false]);
+        $image->update(['is_primary' => true]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Foto utama berhasil diperbarui.',
+        ]);
+    }
+
+    /**
+     * Dynamic AJAX reorder product album images
+     */
+    public function reorderImages(Request $request, Product $product)
+    {
+        $order = $request->input('order', []);
+
+        foreach ($order as $index => $id) {
+            ProductImage::where('id', $id)
+                ->where('product_id', $product->id)
+                ->update(['sort_order' => $index]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Urutan album berhasil disimpan.',
+        ]);
+    }
 }

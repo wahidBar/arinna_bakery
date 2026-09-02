@@ -19,7 +19,7 @@ class OrderController extends Controller
         }
 
         if ($request->filled('search')) {
-            $query->where('invoice_no', 'like', '%' . $request->input('search') . '%');
+            $query->where('invoice_no', 'like', '%'.$request->input('search').'%');
         }
 
         $orders = $query->latest()->paginate(15)->withQueryString();

@@ -1,75 +1,114 @@
 @extends('layouts.admin')
 
-@section('page-title', 'Edit Anggota Tim')
-@section('page-subtitle', 'Website Settings')
+@section('title', 'Edit Anggota Tim')
 
 @section('content')
-<form method="POST" action="{{ route('admin.settings.team-members.update', $teamMember) }}" enctype="multipart/form-data"
-      class="max-w-lg bg-white rounded-2xl border border-amber-100 shadow-sm p-6 space-y-4">
-    @csrf
-    @method('PUT')
+<div class="space-y-5">
 
-    <div>
-        <label class="text-sm font-semibold text-stone-700 block mb-1.5">Nama Lengkap</label>
-        <input type="text" name="name" value="{{ old('name', $teamMember->name) }}"
-               class="w-full border border-amber-100 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400" required>
-        @error('name') <p class="text-xs text-rose-600 mt-1">{{ $message }}</p> @enderror
+    {{-- Page Header --}}
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-[18px] font-bold text-[#2E263D] dark:text-[#EAEAFF] flex items-center gap-2">
+                <i class="ri-edit-box-line text-[#8C57FF] text-2xl"></i> Edit Anggota Tim: {{ $teamMember->name }}
+            </h1>
+            <p class="text-[12px] text-[#6B6678] dark:text-[#A5A3AE] mt-0.5">Perbarui informasi profil dan media sosial anggota tim</p>
+        </div>
+        <a href="{{ route('admin.settings.team-members.index') }}"
+           class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-[13px] font-medium border border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5 text-[#2E263D] dark:text-[#EAEAFF] transition">
+            <i class="ri-arrow-left-line"></i> Kembali
+        </a>
     </div>
 
-    <div>
-        <label class="text-sm font-semibold text-stone-700 block mb-1.5">Jabatan / Peran</label>
-        <input type="text" name="role" value="{{ old('role', $teamMember->role) }}"
-               class="w-full border border-amber-100 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400" required>
-        @error('role') <p class="text-xs text-rose-600 mt-1">{{ $message }}</p> @enderror
-    </div>
+    <div class="materio-card p-5 sm:p-6">
+        <form method="POST" action="{{ route('admin.settings.team-members.update', $teamMember) }}" enctype="multipart/form-data" class="space-y-5">
+            @csrf
+            @method('PUT')
 
-    <div>
-        <label class="text-sm font-semibold text-stone-700 block mb-1.5">Foto (kosongkan jika tidak diganti)</label>
-        @if($teamMember->photo)
-            <img src="{{ asset('storage/' . $teamMember->photo) }}" alt="{{ $teamMember->name }}"
-                 class="w-20 h-20 rounded-full object-cover mb-2 border-2 border-amber-100">
-        @endif
-        <input type="file" name="photo" accept="image/*"
-               class="w-full border border-amber-100 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400">
-        @error('photo') <p class="text-xs text-rose-600 mt-1">{{ $message }}</p> @enderror
-    </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="text-[13px] font-semibold text-[#2E263D] dark:text-[#EAEAFF] block mb-1.5">
+                        Nama Lengkap <span class="text-rose-500">*</span>
+                    </label>
+                    <input type="text" name="name" value="{{ old('name', $teamMember->name) }}"
+                           class="w-full rounded-xl border border-black/10 dark:border-white/10 bg-white dark:bg-[#312D4B] px-3.5 py-2 text-[13px] text-[#2E263D] dark:text-[#EAEAFF] focus:outline-none focus:ring-2 focus:ring-[#8C57FF] @error('name') border-rose-400 @enderror"
+                           required>
+                    @error('name') <p class="text-[12px] text-rose-500 mt-1">{{ $message }}</p> @enderror
+                </div>
 
-    <div>
-        <label class="text-sm font-semibold text-stone-700 block mb-1.5">Link Facebook (opsional)</label>
-        <input type="url" name="facebook" value="{{ old('facebook', $teamMember->facebook) }}"
-               class="w-full border border-amber-100 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400">
-        @error('facebook') <p class="text-xs text-rose-600 mt-1">{{ $message }}</p> @enderror
-    </div>
+                <div>
+                    <label class="text-[13px] font-semibold text-[#2E263D] dark:text-[#EAEAFF] block mb-1.5">
+                        Jabatan / Posisi <span class="text-rose-500">*</span>
+                    </label>
+                    <input type="text" name="role" value="{{ old('role', $teamMember->role) }}"
+                           class="w-full rounded-xl border border-black/10 dark:border-white/10 bg-white dark:bg-[#312D4B] px-3.5 py-2 text-[13px] text-[#2E263D] dark:text-[#EAEAFF] focus:outline-none focus:ring-2 focus:ring-[#8C57FF] @error('role') border-rose-400 @enderror"
+                           required>
+                    @error('role') <p class="text-[12px] text-rose-500 mt-1">{{ $message }}</p> @enderror
+                </div>
+            </div>
 
-    <div>
-        <label class="text-sm font-semibold text-stone-700 block mb-1.5">Link Instagram (opsional)</label>
-        <input type="url" name="instagram" value="{{ old('instagram', $teamMember->instagram) }}"
-               class="w-full border border-amber-100 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400">
-        @error('instagram') <p class="text-xs text-rose-600 mt-1">{{ $message }}</p> @enderror
-    </div>
+            {{-- Existing Photo preview --}}
+            @if($teamMember->photo)
+                <div class="flex items-center gap-3 p-3.5 rounded-xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/5 dark:border-white/5">
+                    <img src="{{ asset('storage/' . $teamMember->photo) }}" class="w-14 h-14 rounded-xl object-cover border border-[#8C57FF]/20">
+                    <div class="text-[13px]">
+                        <p class="font-semibold text-[#2E263D] dark:text-[#EAEAFF]">Foto Profil Saat Ini</p>
+                        <p class="text-[11px] text-stone-400">Unggah file baru di bawah jika ingin mengganti</p>
+                    </div>
+                </div>
+            @endif
 
-    <div>
-        <label class="text-sm font-semibold text-stone-700 block mb-1.5">Link LinkedIn (opsional)</label>
-        <input type="url" name="linkedin" value="{{ old('linkedin', $teamMember->linkedin) }}"
-               class="w-full border border-amber-100 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400">
-        @error('linkedin') <p class="text-xs text-rose-600 mt-1">{{ $message }}</p> @enderror
-    </div>
+            <div>
+                <label class="text-[13px] font-semibold text-[#2E263D] dark:text-[#EAEAFF] block mb-1.5">
+                    Ganti Foto (opsional)
+                </label>
+                <input type="file" name="photo" accept="image/*"
+                       class="w-full rounded-xl border border-black/10 dark:border-white/10 bg-white dark:bg-[#312D4B] px-4 py-2 text-[13px] text-stone-500 focus:outline-none focus:ring-2 focus:ring-[#8C57FF]">
+            </div>
 
-    <div>
-        <label class="text-sm font-semibold text-stone-700 block mb-1.5">Urutan Tampil</label>
-        <input type="number" name="sort_order" value="{{ old('sort_order', $teamMember->sort_order) }}"
-               class="w-full border border-amber-100 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400">
-    </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                    <label class="text-[13px] font-semibold text-[#2E263D] dark:text-[#EAEAFF] block mb-1.5">Facebook</label>
+                    <input type="url" name="facebook" value="{{ old('facebook', $teamMember->facebook) }}" placeholder="https://facebook.com/..."
+                           class="w-full rounded-xl border border-black/10 dark:border-white/10 bg-white dark:bg-[#312D4B] px-3.5 py-2 text-[13px] text-[#2E263D] dark:text-[#EAEAFF] focus:outline-none focus:ring-2 focus:ring-[#8C57FF]">
+                </div>
 
-    <label class="flex items-center gap-2 text-sm">
-        <input type="checkbox" name="is_active" value="1" @checked(old('is_active', $teamMember->is_active))> Tampilkan di halaman web
-    </label>
+                <div>
+                    <label class="text-[13px] font-semibold text-[#2E263D] dark:text-[#EAEAFF] block mb-1.5">Instagram</label>
+                    <input type="url" name="instagram" value="{{ old('instagram', $teamMember->instagram) }}" placeholder="https://instagram.com/..."
+                           class="w-full rounded-xl border border-black/10 dark:border-white/10 bg-white dark:bg-[#312D4B] px-3.5 py-2 text-[13px] text-[#2E263D] dark:text-[#EAEAFF] focus:outline-none focus:ring-2 focus:ring-[#8C57FF]">
+                </div>
 
-    <div class="flex gap-3 pt-2">
-        <button type="submit" class="bg-amber-700 text-white text-sm font-semibold rounded-full px-6 py-2.5 hover:bg-amber-800 shadow-sm transition">
-            Perbarui
-        </button>
-        <a href="{{ route('admin.settings.team-members.index') }}" class="text-sm text-stone-500 self-center">Batal</a>
+                <div>
+                    <label class="text-[13px] font-semibold text-[#2E263D] dark:text-[#EAEAFF] block mb-1.5">LinkedIn</label>
+                    <input type="url" name="linkedin" value="{{ old('linkedin', $teamMember->linkedin) }}" placeholder="https://linkedin.com/in/..."
+                           class="w-full rounded-xl border border-black/10 dark:border-white/10 bg-white dark:bg-[#312D4B] px-3.5 py-2 text-[13px] text-[#2E263D] dark:text-[#EAEAFF] focus:outline-none focus:ring-2 focus:ring-[#8C57FF]">
+                </div>
+            </div>
+
+            <div>
+                <label class="text-[13px] font-semibold text-[#2E263D] dark:text-[#EAEAFF] block mb-1.5">Urutan Tampil</label>
+                <input type="number" name="sort_order" value="{{ old('sort_order', $teamMember->sort_order) }}"
+                       class="w-full rounded-xl border border-black/10 dark:border-white/10 bg-white dark:bg-[#312D4B] px-3.5 py-2 text-[13px] text-[#2E263D] dark:text-[#EAEAFF] focus:outline-none focus:ring-2 focus:ring-[#8C57FF]">
+            </div>
+
+            <div class="pt-2">
+                <label class="flex items-center gap-3 cursor-pointer text-[13px] font-semibold text-[#2E263D] dark:text-[#EAEAFF]">
+                    <input type="checkbox" name="is_active" value="1" @checked(old('is_active', $teamMember->is_active)) class="w-4 h-4 rounded accent-[#8C57FF]">
+                    Tampilkan di Halaman Web
+                </label>
+            </div>
+
+            <div class="pt-4 border-t border-black/5 dark:border-white/5 flex items-center gap-3">
+                <button type="submit"
+                        class="px-5 py-2 rounded-lg bg-gradient-to-r from-[#8C57FF] to-[#9E77FF] text-white text-[13px] font-semibold shadow-md shadow-[#8C57FF]/35 hover:opacity-95 transition flex items-center gap-2">
+                    <i class="ri-check-line text-base"></i> Simpan Perubahan
+                </button>
+                <a href="{{ route('admin.settings.team-members.index') }}"
+                   class="px-4 py-2 rounded-lg text-[13px] font-medium text-stone-500 hover:text-stone-700 dark:hover:text-stone-300 transition">
+                    Batal
+                </a>
+            </div>
+        </form>
     </div>
-</form>
+</div>
 @endsection

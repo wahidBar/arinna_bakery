@@ -1,65 +1,158 @@
 @extends('layouts.admin')
 
-@section('title', 'Kelola Pengguna')
+@section('title', 'Manajemen Pengguna')
 
 @section('content')
-<div class="flex items-center justify-between mb-6">
-    <form method="GET" class="flex gap-3">
-        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama/email..."
-            class="border border-amber-100 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 w-64">
-        <select name="role" class="border border-amber-100 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400">
-            <option value="">Semua Role</option>
-            <option value="admin" {{ request('role') === 'admin' ? 'selected' : '' }}>Admin</option>
-            <option value="customer" {{ request('role') === 'customer' ? 'selected' : '' }}>Customer</option>
-        </select>
-        <button type="submit" class="bg-stone-900 text-white text-sm font-semibold rounded-full px-4 py-2">Cari</button>
-    </form>
+<div class="space-y-6">
 
-    <a href="{{ route('admin.users.create') }}" class="bg-amber-700 text-white text-sm font-semibold rounded-full px-5 py-2.5 hover:bg-amber-800 shadow-sm transition">
-        + Tambah User
-    </a>
-</div>
+    {{-- Page Header & Toolbar Card --}}
+    <div class="materio-card p-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+                <h1 class="text-[18px] font-bold text-[#2E263D] dark:text-[#EAEAFF] flex items-center gap-2">
+                    <i class="ri-user-3-line text-[#8C57FF] text-2xl"></i> Manajemen Pengguna
+                </h1>
+                <p class="text-[12px] text-[#6B6678] dark:text-[#A5A3AE] mt-0.5">Daftar seluruh akun customer dan administrator toko</p>
+            </div>
 
-<div class="bg-white rounded-2xl border border-amber-100 shadow-sm overflow-hidden">
-    <table class="w-full text-sm">
-        <thead class="bg-amber-50/60 text-stone-500">
-            <tr class="text-left">
-                <th class="px-4 py-3">Nama</th>
-                <th class="px-4 py-3">Email</th>
-                <th class="px-4 py-3">Role</th>
-                <th class="px-4 py-3">Status</th>
-                <th class="px-4 py-3">Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($users as $user)
-            <tr class="border-t border-amber-50">
-                <td class="px-4 py-3 font-medium">
-                    <a href="{{ route('admin.users.show', $user) }}" class="hover:text-[#6c7fd8]">{{ $user->name }}</a>
-                </td>
-                <td class="px-4 py-3">{{ $user->email }}</td>
-                <td class="px-4 py-3 capitalize">{{ $user->role }}</td>
-                <td class="px-4 py-3">
-                    <span class="text-xs px-2 py-1 rounded-full {{ $user->is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-stone-100 text-stone-500' }}">
-                        {{ $user->is_active ? 'Aktif' : 'Nonaktif' }}
-                    </span>
-                </td>
-                <td class="px-4 py-3">
-                    <div class="flex gap-2">
-                        <a href="{{ route('admin.users.edit', $user) }}" class="text-amber-700 font-medium hover:underline">Edit</a>
-                        @if ($user->id !== auth()->id())
-                        <form method="POST" action="{{ route('admin.users.destroy', $user) }}" onsubmit="return confirm('Hapus user ini?')">
-                            @csrf @method('DELETE')
-                            <button type="submit" class="text-rose-600 font-medium hover:underline">Hapus</button>
-                        </form>
-                        @endif
+            <div class="flex flex-wrap items-center gap-3">
+                <form method="GET" class="flex flex-wrap items-center gap-2.5 flex-1 sm:flex-initial">
+                    {{-- Search --}}
+                    <div class="relative flex-1 sm:w-64">
+                        <i class="ri-search-line absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-lg"></i>
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama, email, hp..."
+                               class="w-full pl-10 pr-4 py-2.5 text-[14px] rounded-xl border border-black/10 dark:border-white/10 bg-white dark:bg-[#312D4B] focus:outline-none focus:ring-2 focus:ring-[#8C57FF] text-[#2E263D] dark:text-[#EAEAFF]">
                     </div>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
 
-<div class="mt-6">{{ $users->links() }}</div>
+                    {{-- Role Filter --}}
+                    <select name="role" class="px-4 py-2.5 text-[14px] rounded-xl border border-black/10 dark:border-white/10 bg-white dark:bg-[#312D4B] focus:outline-none focus:ring-2 focus:ring-[#8C57FF] text-[#2E263D] dark:text-[#EAEAFF]">
+                        <option value="">Semua Role</option>
+                        <option value="admin" {{ request('role') === 'admin' ? 'selected' : '' }}>Admin</option>
+                        <option value="customer" {{ request('role') === 'customer' ? 'selected' : '' }}>Customer</option>
+                    </select>
+
+                    <button type="submit" class="px-4 py-2.5 rounded-xl bg-black/5 dark:bg-white/10 hover:bg-[#8C57FF] hover:text-white text-[14px] font-semibold text-[#2E263D] dark:text-[#EAEAFF] transition">
+                        Filter
+                    </button>
+                    @if(request('search') || request('role'))
+                        <a href="{{ route('admin.users.index') }}" class="p-2.5 rounded-xl text-[14px] text-rose-500 hover:bg-rose-500/10" title="Reset Filter">
+                            <i class="ri-refresh-line text-lg"></i>
+                        </a>
+                    @endif
+                </form>
+
+                <a href="{{ route('admin.users.create') }}"
+                   class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#8C57FF] to-[#9E77FF] text-white text-[14px] font-semibold shadow-md shadow-[#8C57FF]/30 hover:opacity-95 transition">
+                    <i class="ri-user-add-line text-lg"></i> Tambah User
+                </a>
+            </div>
+        </div>
+    </div>
+
+    {{-- Users Data Table Card --}}
+    <div class="materio-card overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-[14px]">
+                <thead>
+                    <tr class="text-left text-[12px] font-bold uppercase tracking-wider text-stone-400 bg-black/[0.02] dark:bg-white/[0.02] border-b border-black/5 dark:border-white/5">
+                        <th class="py-4 px-6">Pengguna</th>
+                        <th class="py-4 px-4">Role</th>
+                        <th class="py-4 px-4">Kontak HP</th>
+                        <th class="py-4 px-4 text-center">Total Pesanan</th>
+                        <th class="py-4 px-4">Status</th>
+                        <th class="py-4 px-6 text-right">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-black/5 dark:divide-white/5">
+                    @forelse ($users as $user)
+                        <tr class="hover:bg-[#8C57FF]/[0.03] transition">
+                            {{-- User Avatar + Name + Email --}}
+                            <td class="py-4 px-6">
+                                <div class="flex items-center gap-3.5">
+                                    <div class="w-10 h-10 rounded-full {{ $user->role === 'admin' ? 'bg-[#8C57FF]/15 text-[#8C57FF]' : 'bg-emerald-500/15 text-emerald-600' }} font-bold text-[14px] flex items-center justify-center shrink-0">
+                                        {{ strtoupper(substr($user->name, 0, 1)) }}
+                                    </div>
+                                    <div class="min-w-0">
+                                        <a href="{{ route('admin.users.show', $user) }}" class="font-bold text-[15px] text-[#2E263D] dark:text-[#EAEAFF] hover:text-[#8C57FF] transition block truncate max-w-xs">
+                                            {{ $user->name }}
+                                        </a>
+                                        <span class="text-[12px] text-stone-400 block truncate max-w-xs">{{ $user->email }}</span>
+                                    </div>
+                                </div>
+                            </td>
+
+                            {{-- Role Badge --}}
+                            <td class="py-4 px-4">
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[12px] font-bold {{ $user->role === 'admin' ? 'bg-[#8C57FF]/10 text-[#8C57FF]' : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' }}">
+                                    <i class="{{ $user->role === 'admin' ? 'ri-shield-star-line' : 'ri-user-line' }} text-[13px]"></i>
+                                    {{ ucfirst($user->role) }}
+                                </span>
+                            </td>
+
+                            {{-- Phone --}}
+                            <td class="py-4 px-4 font-mono text-[13px] text-stone-500">
+                                {{ $user->phone ?? '—' }}
+                            </td>
+
+                            {{-- Orders Count --}}
+                            <td class="py-4 px-4 text-center">
+                                <span class="inline-flex items-center justify-center min-w-[28px] px-2.5 py-1 rounded-full text-[13px] font-bold bg-black/[0.04] dark:bg-white/[0.05] text-[#2E263D] dark:text-[#EAEAFF]">
+                                    {{ $user->orders_count ?? $user->orders()->count() }}
+                                </span>
+                            </td>
+
+                            {{-- Status --}}
+                            <td class="py-4 px-4">
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[12px] font-semibold {{ $user->is_active ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-stone-500/10 text-stone-500' }}">
+                                    <span class="w-2 h-2 rounded-full {{ $user->is_active ? 'bg-emerald-500' : 'bg-stone-400' }}"></span>
+                                    {{ $user->is_active ? 'Aktif' : 'Nonaktif' }}
+                                </span>
+                            </td>
+
+                            {{-- Actions --}}
+                            <td class="py-4 px-6 text-right">
+                                <div class="flex items-center justify-end gap-2">
+                                    <a href="{{ route('admin.users.show', $user) }}"
+                                       class="w-9 h-9 rounded-xl flex items-center justify-center text-stone-500 hover:text-[#8C57FF] hover:bg-[#8C57FF]/10 transition"
+                                       title="Lihat Detail Profil">
+                                        <i class="ri-eye-line text-lg"></i>
+                                    </a>
+                                    <a href="{{ route('admin.users.edit', $user) }}"
+                                       class="w-9 h-9 rounded-xl flex items-center justify-center text-[#8C57FF] hover:bg-[#8C57FF]/10 transition"
+                                       title="Edit User">
+                                        <i class="ri-edit-box-line text-lg"></i>
+                                    </a>
+                                    @if(auth()->id() !== $user->id)
+                                        <form method="POST" action="{{ route('admin.users.destroy', $user) }}" onsubmit="return confirm('Hapus pengguna {{ addslashes($user->name) }}?')">
+                                            @csrf @method('DELETE')
+                                            <button type="submit"
+                                                    class="w-9 h-9 rounded-xl flex items-center justify-center text-rose-500 hover:bg-rose-500/10 transition"
+                                                    title="Hapus User">
+                                                <i class="ri-delete-bin-line text-lg"></i>
+                                            </button>
+                                        </form>
+                                    @endif
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6" class="py-16 text-center text-stone-400 text-[14px]">
+                                <i class="ri-user-unfollow-line text-5xl block mb-2 text-stone-300"></i>
+                                Tidak ada data pengguna yang cocok.
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        @if($users->hasPages())
+            <div class="px-6 py-4 border-t border-black/5 dark:border-white/5">
+                {{ $users->links() }}
+            </div>
+        @endif
+    </div>
+
+</div>
 @endsection

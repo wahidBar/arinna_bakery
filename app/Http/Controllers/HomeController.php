@@ -44,7 +44,7 @@ class HomeController extends Controller
         // yang punya produk aktif, urut sesuai sort_order.
         // Batasi 3 kategori (di luar tab "All") biar layout tab tidak terlalu panjang.
         $productTabCategories = Category::where('is_active', true)
-            ->whereHas('products', fn($q) => $q->where('is_active', true))
+            ->whereHas('products', fn ($q) => $q->where('is_active', true))
             ->orderBy('sort_order')
             ->take(3)
             ->get()

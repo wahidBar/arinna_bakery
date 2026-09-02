@@ -17,8 +17,8 @@ class ProductFactory extends Factory
         return [
             'category_id' => Category::factory(),
             'name' => Str::title($name),
-            'slug' => Str::slug($name) . '-' . fake()->unique()->numberBetween(1000, 9999),
-            'sku' => 'SKU-' . strtoupper(Str::random(8)),
+            'slug' => Str::slug($name).'-'.fake()->unique()->numberBetween(1000, 9999),
+            'sku' => 'SKU-'.strtoupper(Str::random(8)),
             'price' => $price,
             'discount_price' => $hasDiscount ? (int) ($price * fake()->randomFloat(2, 0.7, 0.9)) : null,
             'stock' => fake()->numberBetween(0, 100),

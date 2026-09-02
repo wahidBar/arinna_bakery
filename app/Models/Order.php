@@ -44,8 +44,8 @@ class Order extends Model
     // Generate invoice number otomatis, contoh: INV-20260812-0001
     public static function generateInvoiceNo(): string
     {
-        $prefix = 'INV-' . now()->format('Ymd') . '-';
-        $lastOrder = static::where('invoice_no', 'like', $prefix . '%')
+        $prefix = 'INV-'.now()->format('Ymd').'-';
+        $lastOrder = static::where('invoice_no', 'like', $prefix.'%')
             ->orderByDesc('id')
             ->first();
 
@@ -53,6 +53,6 @@ class Order extends Model
             ? (int) substr($lastOrder->invoice_no, -4)
             : 0;
 
-        return $prefix . str_pad((string) ($lastNumber + 1), 4, '0', STR_PAD_LEFT);
+        return $prefix.str_pad((string) ($lastNumber + 1), 4, '0', STR_PAD_LEFT);
     }
 }

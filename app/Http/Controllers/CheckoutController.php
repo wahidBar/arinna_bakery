@@ -73,6 +73,6 @@ class CheckoutController extends Controller
 
         // TODO modul selanjutnya: kirim Notification/Mail "Order Diterima" ke customer
 
-        return redirect()->route('orders.show', $order)->with('success', 'Pesanan berhasil dibuat! Invoice: ' . $order->invoice_no);
+        return redirect()->route('orders.show', $order)->with('success', 'Pesanan berhasil dibuat! Invoice: '.$order->invoice_no);
     }
 }

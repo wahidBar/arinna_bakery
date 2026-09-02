@@ -38,10 +38,15 @@ class DashboardController extends Controller
         ];
 
         // Data grafik omzet per bulan (12 bulan terakhir) untuk Chart.js line chart
+        $driver = DB::connection()->getDriverName();
+        $dateExpr = $driver === 'sqlite'
+            ? "strftime('%Y-%m', created_at) as month"
+            : "DATE_FORMAT(created_at, '%Y-%m') as month";
+
         $salesChart = Order::select(
-                DB::raw("DATE_FORMAT(created_at, '%Y-%m') as month"),
-                DB::raw('SUM(total_price) as total')
-            )
+            DB::raw($dateExpr),
+            DB::raw('SUM(total_price) as total')
+        )
             ->where('payment_status', 'paid')
             ->where('created_at', '>=', now()->subMonths(11)->startOfMonth())
             ->groupBy('month')
