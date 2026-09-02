@@ -1,5 +1,5 @@
 # Stage 1: Build Dependencies (PHP + Node)
-FROM php:8.4-fpm-alpine AS builder
+FROM php@sha256:49734670eccf414af884c2a0c2e558401e228615f8028f1c9fca30a0d4fb1bc2 AS builder
 
 # Install system dependencies needed for build
 RUN apk add --no-cache \
@@ -18,7 +18,7 @@ RUN docker-php-ext-install bcmath exif gd mbstring pcntl pdo pdo_mysql xml
 RUN printf "upload_max_filesize=8M\npost_max_size=8M\n" > /usr/local/etc/php/conf.d/uploads.ini
 
 # Install Composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+COPY --from=composer@sha256:8fa35f42911ff8bbee92aa37d781de6799168d4a0535ac6991f1b250bc2e0245 /usr/bin/composer /usr/bin/composer
 
 # Set working directory
 WORKDIR /app
@@ -36,7 +36,7 @@ RUN npm run build
 
 
 # Stage 2: Production Server
-FROM php:8.4-fpm-alpine
+FROM php@sha256:49734670eccf414af884c2a0c2e558401e228615f8028f1c9fca30a0d4fb1bc2
 
 # Install system dependencies for production
 RUN apk add --no-cache \
